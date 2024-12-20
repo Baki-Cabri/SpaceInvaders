@@ -1,5 +1,7 @@
 package Model;
 
+import View.GameScreen;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,8 @@ public class GameState  {
     private byte selectState =0;
 
     public GameState(Canvas canvas) {
+        SGameState game = new GameScreen();
+        states.add(game);
         this.canvas = canvas;
     }
 
