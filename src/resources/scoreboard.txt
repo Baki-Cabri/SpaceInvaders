@@ -1,0 +1,7 @@
+John Pork, 7000
+Sarah, 4500
+Alice, 4000
+Bob, 3000
+John, 2500
+Charlie, 2000
+Invalid Player, -500
