@@ -10,12 +10,17 @@ import java.util.ArrayList;
 public class SpriteAnimation {
 
     private ArrayList<BufferedImage> sprites = new ArrayList<BufferedImage>();
-    private byte currentSprite;
 
+
+
+    private byte currentSprite;
     private int animationSpeed;
+
     private double xPos, yPos;
+
     private boolean loop = false;
     private boolean play = false;
+
     private boolean destroyAnimation = false;
     private Timer timer;
 
@@ -26,28 +31,37 @@ public class SpriteAnimation {
 
         timer = new Timer();
     }
-
+    //Getter and setters
     public boolean isDestroyAfterAnimation() {
         return destroyAnimation;
     }
-
     public void setDestroyAnimation(boolean destroyAnimation) {
         this.destroyAnimation = destroyAnimation;
     }
-
     public double getxPos() {
         return xPos;
     }
-
     public void setxPos(double xPos) {
         this.xPos = xPos;
     }
-
     public double getyPos() {
         return yPos;
     }
     public void setyPos(double yPos) {
         this.yPos = yPos;
+    }
+    public byte getCurrentSprite() {
+        return currentSprite;
+    }
+
+    public void setCurrentSprite(byte currentSprite) {
+        this.currentSprite = currentSprite;
+    }
+    public boolean isLoop() {
+        return loop;
+    }
+    public void setLoop(boolean loop) {
+        this.loop = loop;
     }
 
 
@@ -70,16 +84,19 @@ public class SpriteAnimation {
     }
 
     private void loopAnimation() {
-        if(timer.timerEvent(animationSpeed) && currentSprite != sprites.size()-1 ) {
-            currentSprite++;
-        }else if (timer.timerEvent(animationSpeed) && currentSprite == sprites.size()-1) {
+        if (timer.timerEvent(animationSpeed) && currentSprite == sprites.size()-1) {
             currentSprite = 0;
+            timer.resetTimer();
+        }
+        else if(timer.timerEvent(animationSpeed) && currentSprite != sprites.size()-1 ) {
+            currentSprite++;
         }
     }
 
     private void playAnimation() {
         if(timer.timerEvent(animationSpeed) && currentSprite != sprites.size()-1 && !isSpriteAnimeDestroyed()) {
             play = false;
+            currentSprite = 0;
         }else if (timer.timerEvent(animationSpeed) && currentSprite == sprites.size()-1 && isDestroyAfterAnimation()) {
             sprites = null;
         }else if (timer.timerEvent(animationSpeed) && currentSprite == sprites.size()-1) {
@@ -108,6 +125,8 @@ public class SpriteAnimation {
         this.play = play;
         this.destroyAnimation = destroyAnimation;
     }
+
+
 
 
 

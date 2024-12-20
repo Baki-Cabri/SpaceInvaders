@@ -3,9 +3,13 @@ package Model;
 import Controller.InputHandler;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
-public class Player {
+public class Player implements KeyListener {
     // Attributes
     private String name;
     private int health;
@@ -24,13 +28,6 @@ public class Player {
     int spriteCounter = 0;
     int spriteNum = 1;
 
-    // Constructor
-    public Player(/* GameRenderer gr, InputHandler inputH */) {
-        this.inputH = inputH;
-
-        setDefaultValues(); // Set default attributes for the player.
-        getPlayerImage();   // Load player graphics (images).
-    }
 
     /**
      * Sets the default values for the player attributes like health, score, position, and speed.
@@ -43,39 +40,7 @@ public class Player {
         this.speed = 5;      // Default movement speed
     }
 
-    /**
-     * Loads all player images from the resources folder. These images represent
-     * the player's appearance in different states or directions.
-     */
-    public void getPlayerImage() {
-        try {
-            default1 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/default/default1.png"));
-            default2 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/default/default2.png"));
-            default3 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/default/default3.png"));
-            default4 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/default/default4.png"));
-            default5 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/default/default5.png"));
 
-            left1 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/left/left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/left/left2.png"));
-            left3 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/left/left3.png"));
-            left4 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/left/left4.png"));
-            left5 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/left/left5.png"));
-
-            right1 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/right/right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/right/right2.png"));
-            right3 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/right/right3.png"));
-            right4 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/right/right4.png"));
-            right5 = ImageIO.read(getClass().getResourceAsStream("resources /img/space ship/right/right5.png"));
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle any errors that occur while loading images.
-        }
-    }
-
-    /**
-     * Updates the player's state based on input and handles animations.
-     * - Moves the player left or right.
-     * - Updates the sprite (animation frame) based on movement.
-     */
     public void update() {
         // Check for input to move the player
         if (inputH.leftPressed == true) {
@@ -102,74 +67,6 @@ public class Player {
             }
             spriteCounter = 0; // Reset sprite counter
         }
-    }
-
-    /**
-     * Draws the player on the screen using the appropriate sprite
-     * based on the direction and current animation frame.
-     *
-     * @param g2 The Graphics2D object used for drawing.
-     */
-    public void draw(Graphics2D g2) {
-        BufferedImage image = null;
-
-        // Select the correct image based on the direction and spriteNum
-        switch (direction) {
-            case "default":
-                if (spriteNum == 1) {
-                    image = default1;
-                }
-                if (spriteNum == 2) {
-                    image = default2;
-                }
-                if (spriteNum == 3) {
-                    image = default3;
-                }
-                if (spriteNum == 4) {
-                    image = default4;
-                }
-                if (spriteNum == 5) {
-                    image = default5;
-                }
-                break;
-            case "left":
-                if (spriteNum == 1) {
-                    image = left1;
-                }
-                if (spriteNum == 2) {
-                    image = left2;
-                }
-                if (spriteNum == 3) {
-                    image = left3;
-                }
-                if (spriteNum == 4) {
-                    image = left4;
-                }
-                if (spriteNum == 5) {
-                    image = left5;
-                }
-                break;
-            case "right":
-                if (spriteNum == 1) {
-                    image = right1;
-                }
-                if (spriteNum == 2) {
-                    image = right2;
-                }
-                if (spriteNum == 3) {
-                    image = right3;
-                }
-                if (spriteNum == 4) {
-                    image = right4;
-                }
-                if (spriteNum == 5) {
-                    image = right5;
-                }
-                break;
-        }
-
-        // Draw the selected image at the player's position
-        // g2.drawImage(image, positionX, positionY, null); // Uncomment this when implemented
     }
 
     /**
@@ -204,13 +101,47 @@ public class Player {
         this.score += points; // Increase score
     }
 
-    /**
-     * Displays the player's current status in the console.
-     */
-    public void displayStatus() {
-        System.out.println("Player: " + name);
-        System.out.println("Health: " + health);
-        System.out.println("Score: " + score);
-        System.out.println("Position: (" + positionX + ", " + positionY + ")");
+
+    private BufferedImage pSprite;
+    private double xPos;
+    private double yPos;
+    private int width;
+    private int height;
+    private Rectangle rect;
+
+    public Player(double xPos, double yPos, int width, int height) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.width = width;
+        this.height = height;
+        //for collision
+        rect = new Rectangle((int) xPos, (int) yPos, width, height);
+
+        try {
+            URL url = this.getClass().getResource("src/resources/img/spaceShip/default/default1.png");
+            pSprite= ImageIO.read(url);
+        }catch (IOException e){}
+
+    }
+
+    public void draw(Graphics2D g){
+        g.drawImage(pSprite, (int) xPos, (int) yPos, width, height, null);
+    }
+    public void update(double delta){
+
+    }
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
