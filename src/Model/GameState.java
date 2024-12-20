@@ -1,50 +1,39 @@
 package Model;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameState {
+public class GameState  {
 
-    private Player player;
-    private List<Enemy> enemies;
-    private List<Bullet> bullets;
-    private boolean isGameOver;
-    private int score;
+    private Canvas canvas;
+    private ArrayList<SGameState> states = new ArrayList<SGameState>();
+    private byte selectState =0;
 
-    public GameState() {
-        player = new Player();
-        enemies = new ArrayList<>();
-        bullets = new ArrayList<>();
-        isGameOver = false;
-        score = 0;
-        initializeEnemies();
+    public GameState(Canvas canvas) {
+        this.canvas = canvas;
     }
 
-    private void initializeEnemies() {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                //enemies.add(new Enemy(50 + j * 60, 50 + i * 40));
-            }
+
+    public void draw(Graphics2D g) {
+        states.get(selectState).draw(g);
+    }
+
+    public void update(double delta) {
+        states.get(selectState).update(delta);
+    }
+
+    public void setState(byte state) {
+        for(int i = 0; i <canvas.getKeyListeners().length; i++){
+            canvas.removeKeyListener(canvas.getKeyListeners()[state]);
         }
+        selectState = state;
+        states.get(selectState).init(canvas);
+    }
+    public byte getStates(){
+        return selectState;
     }
 
-    public void update() {
-        // Update game logic
-    }
 
-    public Player getPlayer() {
-        return player;
-    }
 
-    public List<Enemy> getEnemies() {
-        return enemies;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    public int getScore() {
-        return score;
-    }
 }

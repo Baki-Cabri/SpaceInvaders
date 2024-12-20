@@ -1,4 +1,4 @@
-package Main;
+package Display;
 
 import Model.ScoreboardModel;
 import View.*;
