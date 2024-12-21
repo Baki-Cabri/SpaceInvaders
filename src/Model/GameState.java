@@ -38,7 +38,7 @@ public class GameState {
             for (int col = 0; col < cols; col++) {
                 int x = 50 + col * (enemyWidth + spacingX);
                 int y = 50 + row * (enemyHeight + spacingY);
-                enemies.add(new Enemy(x, y, enemyWidth, enemyHeight, 2)); // Pass all required arguments
+                enemies.add(new Enemy(x, y, enemyWidth, enemyHeight, 1)); // Pass all required arguments
             }
         }
         System.out.println("Enemies initialized: " + enemies.size());
