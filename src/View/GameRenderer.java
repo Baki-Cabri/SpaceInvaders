@@ -4,7 +4,6 @@ import Controller.InputHandler;
 import Model.*;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,9 +15,8 @@ public class GameRenderer extends JPanel {
     private GameState gameState; // Reference to the game state
     private InputHandler inputHandler; // Input handler for player controls
     private Player player;
-    private FloatControl volumeControl; // Control for adjusting volume
     private BufferedImage backgroundImage; // Background image
-
+    private BufferedImage gameOverImage; // Game Over image
 
     public GameRenderer(GameState gameState, InputHandler inputHandler) {
         this.gameState = gameState;
@@ -26,12 +24,12 @@ public class GameRenderer extends JPanel {
         this.player = gameState.getPlayer(); // Initialize player after gameState is assigned
         gameState.setPlayer(player);
 
-
         // Load the background image
         try {
             backgroundImage = ImageIO.read(new File("resources/img/Background.jpeg"));
+            gameOverImage = ImageIO.read(new File("resources/img/GameOver.png")); // Load Game Over image
         } catch (IOException e) {
-            System.err.println("Background image not found: " + e.getMessage());
+            System.err.println("Image not found: " + e.getMessage());
         }
 
         // Add key listener to capture inputs
@@ -50,14 +48,15 @@ public class GameRenderer extends JPanel {
         // Draw the game background
         drawBackground(g2);
 
-        // Draw the player
-        drawPlayer(g2);
-
-        // Draw bullets
-        drawBullets(g2);
-
-        // Draw enemies
-        drawEnemies(g2);
+        // If the game is over, show the Game Over image
+        if (gameState.isGameOver()) {
+            drawGameOver(g2);
+        } else {
+            // Draw the player, bullets, and enemies only if the game is not over
+            drawPlayer(g2);
+            drawBullets(g2);
+            drawEnemies(g2);
+        }
     }
 
     /**
@@ -69,6 +68,21 @@ public class GameRenderer extends JPanel {
         } else {
             g2.setColor(Color.BLACK);
             g2.fillRect(0, 0, getWidth(), getHeight());
+        }
+    }
+
+    /**
+     * Draws the Game Over screen.
+     */
+    private void drawGameOver(Graphics2D g2) {
+        if (gameOverImage != null) {
+            int x = (getWidth() - gameOverImage.getWidth()) / 2;
+            int y = (getHeight() - gameOverImage.getHeight()) / 2;
+            g2.drawImage(gameOverImage, x, y, null);
+        } else {
+            g2.setColor(Color.RED);
+            g2.setFont(new Font("Arial", Font.BOLD, 48));
+            g2.drawString("GAME OVER", getWidth() / 3, getHeight() / 2);
         }
     }
 

@@ -67,6 +67,8 @@ public class Enemy extends EntityBase {
         // System.out.println("Enemy updated: (" + x + ", " + y + "), Speed: " + speed);
     }
 
+
+
     /**
      * Draws the enemy on the screen.
      *

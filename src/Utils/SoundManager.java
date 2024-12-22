@@ -55,6 +55,8 @@ public class SoundManager {
             float currentVolume = volumeControl.getValue();
             volumeControl.setValue(Math.min(currentVolume + 2.0f, volumeControl.getMaximum()));
             System.out.println("Volume increased to: " + volumeControl.getValue());
+        } else {
+            System.err.println("Volume control not available.");
         }
     }
 
@@ -63,8 +65,11 @@ public class SoundManager {
             float currentVolume = volumeControl.getValue();
             volumeControl.setValue(Math.max(currentVolume - 2.0f, volumeControl.getMinimum()));
             System.out.println("Volume decreased to: " + volumeControl.getValue());
+        } else {
+            System.err.println("Volume control not available.");
         }
     }
+
 
 
     public void playBackgroundMusic(String filePath) {
